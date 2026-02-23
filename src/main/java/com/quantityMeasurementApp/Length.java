@@ -1,75 +1,59 @@
 package com.quantityMeasurementApp;
 
+import java.util.Objects;
+
 public class Length {
-	private double value;
-	private LengthUnit unit;
+
+	private final double value;
+	private final LengthUnit unit;
 
 	public enum LengthUnit {
-//		FEET(conversionFactor: 12.0),
-		FEET(12.0), INCHES(1.0);
 
-		private final double conversionFactor;
+		FEET(1.0), INCHES(1.0 / 12.0), YARDS(3.0), CENTIMETERS(0.393701 / 12.0);
 
-		// enum to represent different units and their conversion factors with
-		// the base unit being inches. This means all the conversion factors are defined
-		// in terms of inches.
-		LengthUnit(double conversionFactor) {
-			this.conversionFactor = conversionFactor;
+		private final double toFeetFactor;
+
+		LengthUnit(double toFeetFactor) {
+			this.toFeetFactor = toFeetFactor;
 		}
 
-		public double getConversionFactor() {
-			return conversionFactor;
+		public double toFeet(double value) {
+			return value * toFeetFactor;
 		}
 	}
 
 	public Length(double value, LengthUnit unit) {
-		if (unit == null) {
-			throw new IllegalArgumentException("unit cannot be null");
+		if (!Double.isFinite(value)) {
+			throw new IllegalArgumentException("Value must be a finite number");
 		}
-
+		if (unit == null) {
+			throw new IllegalArgumentException("Unit must not be null");
+		}
 		this.value = value;
 		this.unit = unit;
 	}
 
-	private double convertToBaseUnit() {
-		return this.value * this.unit.getConversionFactor();
+	private double toBaseUnit() {
+		return unit.toFeet(value);
 	}
 
-	public boolean compare(Length thatLength) {
-		if (thatLength == null) {
-			return false;
-		}
-		return Double.compare(this.convertToBaseUnit(), thatLength.convertToBaseUnit()) == 0;
-	}
-
-	// Override equals method
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
+	public boolean equals(Object obj) {
+
+		if (this == obj)
 			return true;
-		}
-		if (o == null) {
+		if (obj == null)
 			return false;
-		}
-
-		if (getClass() != o.getClass()) {
-			return false;
-		}
-
-		Length that = (Length) o;
-
-		// Defensive check in case a null unit somehow bypassed the constructor
-		if (this.unit == null || that.unit == null)
+		if (getClass() != obj.getClass())
 			return false;
 
-		return Double.compare(this.convertToBaseUnit(), that.convertToBaseUnit()) == 0;
+		Length other = (Length) obj;
+
+		return Double.compare(this.toBaseUnit(), other.toBaseUnit()) == 0;
 	}
 
-	// main method for standalone testing
-	public static void main(String[] args) {
-		Length l1 = new Length(1.0, LengthUnit.FEET);
-		Length l2 = new Length(12.0, LengthUnit.INCHES);
-		System.out.println("Are lengths equal ? " + l1.equals(l2));
+	@Override
+	public int hashCode() {
+		return Objects.hash(toBaseUnit());
 	}
-
 }

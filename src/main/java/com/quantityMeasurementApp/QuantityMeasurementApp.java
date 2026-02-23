@@ -1,36 +1,32 @@
 package com.quantityMeasurementApp;
 
-import com.quantityMeasurement.Length.LengthUnit;
-
 public class QuantityMeasurementApp {
-	// Create a generic method to demonstrate Length equality check
-	public static boolean demonstrateLengthEquality(Length l1,Length l2) {
+
+	public static boolean demonstrateLengthEquality(Length l1, Length l2) {
 		return l1.equals(l2);
 	}
-	// Define a static method to demonstrate Feet equality check
-	public static void demonstrateFeetEquality() {
-		Feet feet1=new Feet(5.0);
-		Feet feet2=new Feet(5.0);
-		
-		System.out.println("Feet Equality : "+ feet1.equals(feet2));
+
+	public static boolean demonstrateLengthComparison(double value1, Length.LengthUnit unit1, double value2,Length.LengthUnit unit2) {
+
+		Length l1 = new Length(value1, unit1);
+		Length l2 = new Length(value2, unit2);
+
+		boolean result = l1.equals(l2);
+
+		System.out.println("lengths are equal : " + result);
+		return result;
 	}
-	// Define a static method to demonstrate Inches equality check
-	public static void demonstrateInchesEquality() {
-		Inch inch1 = new Inch(1.0);
-		Inch inch2 = new Inch(1.0);
-		
-		System.out.println("Inch Equality : "+ inch1.equals(inch2));
-	}
-	// Create a static method to demonstrate Feet and Inches comparison
-	public static void demonstrateFeetInchesComparison() {
-		Length l1= new Length(1.0,LengthUnit.FEET);
-		Length l2=new Length(12.0,LengthUnit.INCHES);
-		System.out.println("Feet-Inches Equality -> " + l1.equals(l2));
-	}
-	
+
 	public static void main(String[] args) {
-		demonstrateFeetEquality();
-		demonstrateInchesEquality();
-		demonstrateFeetInchesComparison();
+			//github.com/harsh-vardhan36
+		demonstrateLengthComparison(1.0, Length.LengthUnit.FEET, 12.0, Length.LengthUnit.INCHES);
+
+		demonstrateLengthComparison(1.0, Length.LengthUnit.YARDS, 3.0, Length.LengthUnit.FEET);
+
+		demonstrateLengthComparison(1.0, Length.LengthUnit.YARDS, 36.0, Length.LengthUnit.INCHES);
+
+		demonstrateLengthComparison(1.0, Length.LengthUnit.CENTIMETERS, 0.393701, Length.LengthUnit.INCHES);
+
+		demonstrateLengthComparison(2.0, Length.LengthUnit.YARDS, 6.0, Length.LengthUnit.FEET);
 	}
 }
