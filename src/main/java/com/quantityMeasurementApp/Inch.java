@@ -1,24 +1,29 @@
 package com.quantityMeasurementApp;
 
-public class Inches {
-
+public class Inch {
 	private final double value;
-
-	public Inches(double value) {
-		this.value = value;
+	
+	public Inch(double value) {
+		this.value=value;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
-
-		if (this == obj)
+		if(this==obj) {
 			return true;
-		if (obj == null)
+		}
+		
+		if(obj== null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		
+		if(getClass() != obj.getClass()) {
 			return false;
-
-		Inches other = (Inches) obj;
+		}
+		
+		Inch other=(Inch) obj;
+		
 		return Double.compare(this.value, other.value) == 0;
+		
 	}
 }
