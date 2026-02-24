@@ -18,6 +18,9 @@ buildNumber.properties
 /.metadata/
 .settings
 
+# macOS system files
+.DS_Store
+
 ### OS files ###
 .DS_Store
 Thumbs.db

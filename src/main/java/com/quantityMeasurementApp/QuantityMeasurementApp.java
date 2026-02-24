@@ -2,70 +2,88 @@ package com.quantityMeasurementApp;
 
 public class QuantityMeasurementApp {
 
-	public static boolean demonstrateLengthEquality(Length length1, Length length2) {
-		return length1.equals(length2);
+	public static <U extends IMeasurable> boolean demonstrateEquality(Quantity<U> q1, Quantity<U> q2) {
+		return q1.equals(q2);
 	}
 
-	public static boolean demonstrateLengthComparison(double value1, Length.LengthUnit unit1, double value2,
-			Length.LengthUnit unit2) {
+	public static <U extends IMeasurable> boolean demonstrateComparison(double value1, U unit1, double value2,
+			U unit2) {
 
-		Length l1 = new Length(value1, unit1);
-		Length l2 = new Length(value2, unit2);
+		Quantity<U> q1 = new Quantity<>(value1, unit1);
+		Quantity<U> q2 = new Quantity<>(value2, unit2);
 
-		boolean result = l1.equals(l2);
+		boolean result = q1.equals(q2);
 
-		System.out.println("lengths are equal : " + result);
+		System.out.println("quantities are equal : " + result);
 		return result;
 	}
 
-	public static double demonstrateLengthConversion(double value, Length.LengthUnit from, Length.LengthUnit to) {
+	public static <U extends IMeasurable> double demonstrateConversion(double value, U from, U to) {
 
-		double result = Length.convert(value, from, to);
+		double result = Quantity.convert(value, from, to);
 
-		System.out.println(value + " " + from + " = " + result + " " + to);
-
-		return result;
-	}
-
-	public static Length demonstrateLengthConversion(Length length, Length.LengthUnit toUnit) {
-
-		Length result = length.convertTo(toUnit);
-
-		System.out.println(length + " = " + result);
+		System.out.println(value + " " + from.getUnitName() + " = " + result + " " + to.getUnitName());
 
 		return result;
 	}
 
-	public static Length demonstrateLengthAddition(Length length1, Length length2) {
+	public static <U extends IMeasurable> Quantity<U> demonstrateAddition(Quantity<U> q1, Quantity<U> q2) {
 
-		Length result = length1.add(length2);
+		Quantity<U> result = q1.add(q2);
 
-		System.out.println("Addition result: " + result);
+		System.out.println("Addition : " + result);
+
+		return result;
+	}
+
+	public static <U extends IMeasurable> Quantity<U> demonstrateAddition(Quantity<U> q1, Quantity<U> q2,
+			U targetUnit) {
+
+		Quantity<U> result = q1.add(q2, targetUnit);
+
+		System.out.println("Addition : " + result);
 
 		return result;
 	}
 
 	public static void main(String[] args) {
 
-		demonstrateLengthComparison(1.0, Length.LengthUnit.FEET, 12.0, Length.LengthUnit.INCHES);
-		demonstrateLengthComparison(1.0, Length.LengthUnit.YARDS, 3.0, Length.LengthUnit.FEET);
-		demonstrateLengthComparison(1.0, Length.LengthUnit.YARDS, 36.0, Length.LengthUnit.INCHES);
-		demonstrateLengthComparison(1.0, Length.LengthUnit.CENTIMETERS, 0.39, Length.LengthUnit.INCHES);
-		demonstrateLengthComparison(2.0, Length.LengthUnit.YARDS, 6.0, Length.LengthUnit.FEET);
+		demonstrateComparison(1.0, LengthUnit.FEET, 12.0, LengthUnit.INCHES);
 
-		demonstrateLengthConversion(1.0, Length.LengthUnit.FEET, Length.LengthUnit.INCHES);
-		demonstrateLengthConversion(3.0, Length.LengthUnit.YARDS, Length.LengthUnit.FEET);
-		demonstrateLengthConversion(2.54, Length.LengthUnit.CENTIMETERS, Length.LengthUnit.INCHES);
+		demonstrateComparison(1.0, LengthUnit.YARDS, 3.0, LengthUnit.FEET);
+			//github.com/harsh-vardhan36
+		demonstrateComparison(1.0, LengthUnit.YARDS, 36.0, LengthUnit.INCHES);
 
-		Length lengthInYards = new Length(2.0, Length.LengthUnit.YARDS);
-		demonstrateLengthConversion(lengthInYards, Length.LengthUnit.INCHES);
+		demonstrateComparison(1.0, LengthUnit.CENTIMETERS, 0.393701, LengthUnit.INCHES);
 
-		Length lengthInFeet = new Length(3.0, Length.LengthUnit.FEET);
-		demonstrateLengthConversion(lengthInFeet, Length.LengthUnit.YARDS);
+		demonstrateComparison(2.0, LengthUnit.YARDS, 6.0, LengthUnit.FEET);
 
-		System.out.println("\n=== UC6: Addition Operations ===");
-		demonstrateLengthAddition(new Length(1.0, Length.LengthUnit.FEET), new Length(12.0, Length.LengthUnit.INCHES));
-		demonstrateLengthAddition(new Length(1.0, Length.LengthUnit.YARDS), new Length(3.0, Length.LengthUnit.FEET));
-		demonstrateLengthAddition(new Length(2.54, Length.LengthUnit.CENTIMETERS),new Length(1.0, Length.LengthUnit.INCHES));
+		demonstrateConversion(1.0, LengthUnit.FEET, LengthUnit.INCHES);
+
+		demonstrateConversion(3.0, LengthUnit.YARDS, LengthUnit.FEET);
+
+		demonstrateConversion(2.54, LengthUnit.CENTIMETERS, LengthUnit.INCHES);
+
+		demonstrateAddition(new Quantity<>(1.0, LengthUnit.FEET), new Quantity<>(12.0, LengthUnit.INCHES));
+
+		demonstrateAddition(new Quantity<>(1.0, LengthUnit.FEET), new Quantity<>(12.0, LengthUnit.INCHES),
+				LengthUnit.YARDS);
+
+		demonstrateComparison(1.0, WeightUnit.KILOGRAM, 1000.0, WeightUnit.GRAM);
+
+		demonstrateComparison(1.0, WeightUnit.KILOGRAM, 2.20462, WeightUnit.POUND);
+
+		demonstrateComparison(500.0, WeightUnit.GRAM, 0.5, WeightUnit.KILOGRAM);
+
+		demonstrateConversion(1.0, WeightUnit.KILOGRAM, WeightUnit.GRAM);
+
+		demonstrateConversion(2.0, WeightUnit.POUND, WeightUnit.KILOGRAM);
+
+		demonstrateConversion(500.0, WeightUnit.GRAM, WeightUnit.POUND);
+
+		demonstrateAddition(new Quantity<>(1.0, WeightUnit.KILOGRAM), new Quantity<>(2.0, WeightUnit.KILOGRAM));
+
+		demonstrateAddition(new Quantity<>(1.0, WeightUnit.KILOGRAM), new Quantity<>(1000.0, WeightUnit.GRAM),
+				WeightUnit.GRAM);
 	}
 }
