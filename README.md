@@ -41,4 +41,4 @@
 
 * **Based on the defined test cases, the architecture now supports infinite measurement categories with a single, maintainable code path.**
 * **Pushed the generic refactor to the repository.**
-* **Code :** [UC 10 Generic Refactor](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/edit/feature/UC10-Generic-Quantity-Class)
+* **Code :** [UC 10 Generic Refactor](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC10-Generic-Quantity-Length)
