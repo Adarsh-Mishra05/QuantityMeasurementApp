@@ -1,41 +1,43 @@
 # QuantityMeasurementApp
-## UC6 - Addition of Two Length Units
-> UC6 extends the application by introducing addition operations between length measurements. 
-> It enables the API to add two lengths of potentially different units and return the result in the unit of the first operand.
-
-
+## UC9 - Weight Measurement Equality, Conversion, and Addition
+### Overview
+> UC9 extends the application to support **Weight measurements** (Kilogram, Gram, Pound) as a distinct category. This implementation demonstrates that the generic design patterns established in UC1–UC8 scale seamlessly to new measurement types. The architecture reinforces the **Single Responsibility Principle** by delegating conversion logic to a standalone `WeightUnit` enum while maintaining strict **Category Type Safety** to ensure weights and lengths are never compared or added.
 ---
-### Date : 20 Feb 2026
-* Worked on feature 6 which focuses on arithmetic operations for length units.
-* Implemented the addition logic within the `Length` class ensuring the result unit consistency.
+### Date : 21 Feb 2026
+* Implemented the `WeightUnit` standalone enum and `QuantityWeight` domain class.
+* Established category-level isolation to prevent cross-type interoperability.
 ---
 ### Performed operations in the following steps:
-* **Step 1 – Arithmetic Implementation in Value Object**
-  > 1. Added the `add()` instance method to the `Length` class to handle measurement summation.
-  > 2. Implemented normalization logic: both operands are converted to the base unit (Inches) before addition.
-  > 3. Ensured the final sum is converted from the base unit back to the unit of the first operand to maintain consistency.
-
-* **Step 2 – Validation and Immutability**
-  > 1. Confirmed that original `Length` objects remain unchanged after addition, adhering to the immutability principle.
-  > 2. Added validation to ensure both operands are non-null and contain finite numeric values (using `Double.isFinite`).
-  > 3. Optimized the code to perform the final unit conversion only once, resolving potential "double-conversion" inaccuracies.
-
-* **Step 3 – Test Coverage and Mathematical Properties**
-  > 1. Ensured comprehensive test cases cover same-unit addition (Feet + Feet) and cross-unit addition (Feet + Inches).
-  > 2. Verified the Commutative Property: confirmed that `add(A, B)` yields the same result as `add(B, A)`.
-  > 3. Implemented tests for Identity Element (adding zero) and negative value handling.
-  > 4. Continued use of **Epsilon ($\epsilon$)** of $1e-6$ in JUnit assertions to account for floating-point precision differences.
+* **Step 1 – Creating Standalone WeightUnit Enum**
+  > 1. Defined units: **KILOGRAM** (Base: 1.0), **GRAM** (0.001), and **POUND** (0.453592).
+  > 2. Implemented `convertToBaseUnit()` and `convertFromBaseUnit()` to centralize weight conversion factors.
+* **Step 2 – Implementing QuantityWeight Class**
+  > 1. Mirrored the refactored design of `Length` to maintain consistency across the application.
+  > 2. Implemented `equals()` with epsilon-based comparison to handle floating-point precision for Pounds and Grams.
+  > 3. Provided overloaded `add()` methods for both implicit and explicit target unit specification.
+* **Step 3 – Category Isolation & Verification**
+  > 1. Added explicit checks in the `equals()` method to reject any comparison between a `QuantityWeight` and a `Length` object.
+  > 2. Verified mathematical accuracy for cross-unit equality (e.g., 1 kg = 1000 g) and round-trip conversions.
 ---
 ### Features
-* **Generic Length Design:** Scalable architecture that supports adding new units (Feet, Inches, Yards, Centimeters) with zero modification to core logic.
-* **Immutability:** Every operation returns a new `Length` instance, ensuring the original measurement data remains thread-safe and unchanged.
-* **High-Precision Conversions:** Mathematical accuracy is maintained for complex units like Centimeters using a specific factor ($1 \text{ cm} = 0.393701 \text{ in}$).
-* **Base-Unit Normalization:** Internal arithmetic and comparisons are performed by first converting heterogeneous units to a common base unit (Inches).
-* **Flexible API (Method Overloading):** Supports multiple ways to interact with the app, including raw value addition and object-based arithmetic.
-* **Epsilon-Based Assertions:** Uses a small tolerance ($\epsilon = 1e-6$) in testing to handle binary floating-point rounding issues without losing data precision.
-* **Value Object Semantics:** Features overridden `equals()` and `toString()` methods for better readability and safe object comparison.
+* **Independent Weight Category:** Supports Kilograms (Base), Grams, and Pounds with independent conversion logic.
+* **Category Type Safety:** Implements strict runtime checks (`getClass()`) to ensure that Weight and Length measurements are treated as incomparable categories (e.g., 1 kg ≠ 1 foot).
+* **Delegation Pattern:** The `QuantityWeight` class delegates all mathematical transformations to the `WeightUnit` enum, keeping the domain class focused on state.
+* **Scalable Architecture:** Validates that the system can expand to multiple categories (Weight, Volume, Temperature) without refactoring existing Length logic.
+* **Immutability:** Ensures thread-safety and data integrity by returning new instances for every conversion and addition operation.
 ---
-
-* **Based on test cases, the program was optimized for mathematical accuracy.**
-* **Pushed the code to the repository.**
-* **Code :** [UC 6](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC6-UnitAddition)
+### Concepts Learned in UC9
+* **Multiple Measurement Categories:** Designing systems that accommodate different physical quantities while maintaining strict boundaries.
+* **Category Type Safety:** Using class-level validation to prevent logical errors in multi-category domain models.
+* **Precision and Epsilon:** Managing floating-point tolerances across different conversion scales (metric vs. imperial).
+* **Architectural Scalability:** Confirming that existing patterns are reusable and extensible for future needs.
+---
+### Example Output
+* **Equality**: `Quantity(1.0, KILOGRAM).equals(1000.0, GRAM)` -> **true**
+* **Conversion**: `Quantity(1.0, KILOGRAM).convertTo(POUND)` -> **Quantity(2.205, POUND)**
+* **Addition**: `Quantity(1.0, KILOGRAM).add(1000.0, GRAM)` -> **Quantity(2.0, KILOGRAM)**
+* **Incompatibility**: `Weight(1.0kg).equals(Length(1.0ft))` -> **false**
+---
+* **Based on the defined test cases, the application now supports multiple, isolated measurement categories with high precision.**
+* **Pushed the weight measurement implementation to the repository.**
+* **Code :** [UC 9](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC9-WeightMeasurement)
