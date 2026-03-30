@@ -1,132 +1,132 @@
-# QuantityMeasurementApp
-# UC 15 N-TierArchitecture
+# UC17: Spring Framework Integration - REST Services & JPA
 
 ## Overview
-UC15 introduces **JSON support** to the Quantity Measurement Application.  
-The application can now **accept measurement data in JSON format and return responses in JSON**, making the API easier to integrate with web applications, mobile apps, and external systems.
 
-This enhancement improves interoperability and follows modern **REST API communication standards**.
+UC17 upgrades the Quantity Measurement Application from a standalone JDBC-based system (UC16) to a Spring Boot-powered RESTful application.
 
----
+This transformation introduces:
+- REST APIs for interaction
+- Spring Data JPA for persistence
+- Dependency Injection and transaction management
+- Production-ready architecture
 
-## Objective
-The objective of this use case is to:
-
-- Accept measurement data through a **JSON request body**
-- Convert units using the existing **business logic**
-- Return the **conversion result in JSON format**
-- Enable easy API testing through tools like **Postman or curl**
-
----
-## Technology Stack
-- Java
-- Spring Boot
-- REST API
-- Jackson (for JSON serialization/deserialization)
-- Maven
+The goal is to move toward enterprise-grade backend development while preserving all existing business logic from UC1–UC16.
 
 ---
 
-## API Endpoint
+## Key Features
 
-### Convert Quantity
+### Spring Boot Integration
+- Auto-configuration and simplified setup
+- Embedded Tomcat server (no external server required)
 
-**Endpoint**
+### RESTful API
+- Exposes endpoints using `@RestController`
+- Supports JSON/XML responses
+- Proper HTTP methods: GET, POST, PUT, DELETE
 
-```
-POST /quantity/convert
-```
+### Spring Data JPA
+- Eliminates JDBC boilerplate
+- Automatic ORM mapping
+- Repository interfaces instead of manual SQL
 
-**Description**
+### Layered Architecture
+- Controller Layer → Handles HTTP requests  
+- Service Layer → Business logic  
+- Repository Layer → Database interaction  
 
-Converts a quantity from one unit to another unit within the same measurement category.
+### DTO-Based Communication
+- `QuantityInputDTO` → Input payload  
+- `QuantityMeasurementDTO` → Response object  
+
+### Exception Handling
+- Centralized using `@ControllerAdvice`
+- Clean API error responses with HTTP status codes
+
+### Swagger API Documentation
+- Interactive API documentation
+- Uses `@Operation` and `@Tag`
+
+### Testing Support
+- Unit and Integration testing
+- `MockMvc` for REST API testing
+
+### Monitoring
+- Spring Boot Actuator for:
+  - Health checks
+  - Metrics
 
 ---
 
-## Request Body (JSON)
+## What Changed from UC16?
 
-Example request:
+UC16 used JDBC. UC17 replaces it with the Spring ecosystem.
+
+| UC16 (Before) | UC17 (Now) |
+|--------------|-----------|
+| Manual JDBC code | Spring Data JPA |
+| SQL queries | Repository methods |
+| Manual DI | Spring DI (`@Autowired`) |
+| No REST support | REST APIs |
+| Manual JSON handling | Automatic serialization |
+| Manual transaction handling | Declarative (optional) |
+| Hard to scale | Microservice-ready |
+
+---
+
+## Problems in UC16 (Solved in UC17)
+
+- Too much boilerplate (ResultSet, Connection handling)
+- Manual transaction management
+- No REST API support
+- Difficult testing
+- Tight coupling
+- No framework ecosystem support
+
+UC17 resolves all of these using Spring Boot.
+
+---
+
+---
+
+## Important Components
+
+### Controller Layer
+- Handles API requests
+- Uses:
+  - `@RestController`
+  - `@RequestMapping("/api/v1/quantities")`
+  - `@PostMapping`, `@GetMapping`
+
+### Service Layer
+- Contains business logic
+- Annotated with `@Service`
+- Uses repository for DB operations
+
+### Repository Layer
+- Extends `JpaRepository`
+- No SQL required
+
+---
+
+## Sample API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|------------|
+| POST | `/compare` | Compare two quantities |
+| POST | `/convert` | Convert units |
+| POST | `/add` | Add quantities |
+| GET | `/history/{operation}` | Get operation history |
+| GET | `/count/{operation}` | Get operation count |
+
+---
+
+## Example Request
 
 ```json
 {
-  "value": 1,
-  "fromUnit": "FEET",
-  "toUnit": "INCH"
+  "value1": 10,
+  "unit1": "FEET",
+  "value2": 120,
+  "unit2": "INCH"
 }
-```
-
----
-
-## Response Body (JSON)
-
-Example response:
-
-```json
-{
-  "convertedValue": 12
-}
-```
-
-This means **1 foot = 12 inches**.
-
----
-
-## How It Works
-
-1. The client sends a **JSON request** containing:
-   - value
-   - source unit
-   - target unit
-
-2. The **Controller Layer** receives the request.
-
-3. The request is passed to the **Service Layer** where conversion logic is applied.
-
-4. The application calculates the result.
-
-5. The result is returned as a **JSON response**.
-
----
-
-## Example Using cURL
-
-```
-curl -X POST http://localhost:8080/quantity/convert \
--H "Content-Type: application/json" \
--d '{"value":1,"fromUnit":"FEET","toUnit":"INCH"}'
-```
-
----
-
-## Expected Output
-
-```
-{
-  "convertedValue": 12
-}
-```
-
----
-
-## Benefits of UC15
-
-- Enables **standard JSON communication**
-- Makes the API easier to integrate with **frontend applications**
-- Improves **testing using API tools**
-- Follows **RESTful design principles**
-
----
-
-## Future Enhancements
-
-- Support multiple measurement types (length, volume, temperature)
-- Add validation for incompatible unit conversions
-- Provide detailed error responses
-- Add API documentation using **Swagger/OpenAPI**
-
----
-
-## Conclusion
-
-UC15 enhances the Quantity Measurement Application by enabling **JSON-based REST communication**. This makes the service more flexible, scalable, and compatible with modern applications.
-* **Code :** [UC 15 N-TierArchitecture](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC15-NTierArchitecture)
