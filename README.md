@@ -1,84 +1,130 @@
-# Quantity Measurement Application
-## A Generic, Type-Safe Measurement Engine in Java
-
-### Project Overview
-The **Quantity Measurement Application** is a robust Java-based engine designed to handle diverse physical quantities including **Length, Weight, Volume, and Temperature**. The project demonstrates an architectural evolution from basic object comparison to a highly scalable, generic system that adheres to **SOLID principles**, **Interface Segregation**, and the **DRY (Don't Repeat Yourself)** principle.
-This project is build on Incremental model & Test Driven Development Model.
-The engine supports cross-unit arithmetic, non-linear temperature conversions, and strict category isolation, ensuring that logically incompatible measurements (e.g., adding weight to length) are prevented at both compile-time and runtime.
+# 📐 Quantity Measurement App
 
 ---
 
-### Architectural Journey (UC Summary)
+## 🧭 Overview
 
-| UC | Feature | Focus | Link |
-|:---|:---|:---|:---|
-| **01** | Feet Equality | Object Equality & Encapsulation | [View UC01](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC1-FeetEquality) |
-| **02** | Inches Support | Handling Multiple Units | [View UC02](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC2-InchEquality) |
-| **03** | DRY Refactor[Generic Length] | Unit Enums & Normalization | [View UC03](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC3-GenericLength) |
-| **04** | Yard & Centimeter Support | Scaling Linear Comparisons | [View UC04](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC4-YardEquality) |
-| **05** | Unit Conversion | Conversion Logic and Validation | [View UC05](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC5-UnitConversion) |
-| **06** | Addition Logic |  Logic Introduction | [View UC06](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC6-UnitAddition) |
-| **07** | Target Unit Addition |  Addition with Target Unit Specification | [View UC07](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC7-TargetUnitAddition) |
-| **08** | Standalone Unit | Separation of enum Logic in a separate enum class | [View UC08](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC8-StandaloneUnit) |
-| **09** | Weight Measurement | Cross-Unit Weight Arithmetic & conversions | [View UC09](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC9-WeightMeasurement) |
-| **10** | Generic Quantity | Bounded Type Parameters (Generics) with multi-category support | [View UC10](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC10-Generic-Quantity-Length) |
-| **11** | Volume Support | Scalability Test of Generics | [View UC11](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC11-VolumeEquality) |
-| **12** | Sub/Div Ops | Non-Commutative Arithmetic | [View UC12](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC12-QuantitySubtractionDivision) |
-| **13** | DRY Refactor | Centralized Arithmetic Logic with Functional Lambdas & Enum Dispatch | [View UC13](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC13-CentralizedArithmeticLogic) |
-| **14** | Temperature | Non-Linearity & Capability Check | [View UC14](https://github.com/Adarsh-Mishra05/QuantityMeasurementApp/tree/feature/UC14-TemperatureMeasurement) |
+The **Quantity Measurement App** is a backend application that started as a simple problem — comparing units like feet and inches — and gradually evolved into a **scalable, secure, real-world system**.
+
+Over multiple use cases (UC1 → UC18), this project demonstrates how basic logic can grow into a production-style backend using:
+
+- Object-Oriented Design
+- Generic Programming
+- REST APIs
+- Layered Architecture
+- Secure Authentication (JWT + Google OAuth)
 
 ---
 
-### Core Use Case Details
+## 💡 What Problem Does It Solve?
 
-#### UC01 - UC02: Basic Equality
-Established the foundation of value-based equality. We moved away from primitive comparison to encapsulated objects, ensuring that `1.0 ft` equals another `1.0 ft` object based on value rather than memory reference.
+It allows users to:
 
-#### UC03 - UC05: Normalization & Scaling
-Introduced the **LengthUnit Enum**. By establishing a base unit (Length), the system gained the ability to compare different units.
-* **Logic:** `Value * Factor = BaseValue`.
-* **Result:** `1 Yard == 3 Feet == 36 Inches`.
+- Compare quantities (e.g., 1 foot == 12 inches)
+- Convert units (feet, inches, liters, kg, etc.)
+- Perform operations (addition, subtraction, division)
+- Securely access APIs using authentication
+
+---
+
+## 🧠 How the Project Evolved
+
+### 🔹 Phase 1: Core Logic (UC1–UC4)
+- Started with basic equality checks
+- Introduced unit conversion (feet ↔ inches)
+- Learned object equality and clean class design
+
+---
+
+### 🔹 Phase 2: Scalable Design (UC5–UC10)
+- Created a generic `Quantity` system
+- Introduced enums for units
+- Applied DRY and OOP principles
+- Supported multiple domains (Length, Weight, Volume)
+
+---
+
+### 🔹 Phase 3: Operations & Abstraction (UC11–UC14)
+- Added arithmetic operations (add, subtract, divide)
+- Centralized logic using reusable patterns
+- Improved code maintainability
+
+---
+
+### 🔹 Phase 4: Backend Architecture (UC15–UC17)
+- Converted project into a Spring Boot application
+- Introduced layered architecture:
+  - Controller → Service → Repository
+- Used DTOs for clean API communication
+- Built REST APIs
+
+---
+
+### 🔹 Phase 5: Security (UC18)
+- Implemented authentication using:
+  - JWT (JSON Web Token)
+  - Google OAuth 2.0
+- Secured APIs using Spring Security
+
+---
+
+## 🔐 Authentication Explained (Simple)
+
+### 1. JWT Authentication
+
+When a user logs in:
+- The system verifies credentials
+- Generates a **JWT token**
+- This token is used for future requests
+
+👉 No need to log in again and again
+
+---
+
+### 2. Google Authentication (OAuth 2.0)
+
+Instead of creating an account:
+- User logs in via Google
+- Backend receives user details
+- JWT token is generated automatically
+
+👉 Faster and more secure login
+
+---
+
+## ⚙️ How It Works (Flow)
+
+### Normal API Flow
+> Client → Controller → Service → Repository → Database
 
 
-
-#### UC06 - UC09: Arithmetic & Weight Integration
-Extended the engine to support mathematical operations. 
-* **Addition:** `2 Inches + 5 cm = 3.97 Inches`.
-* **Weight Domain:** Integrated Grams, Kilograms, and Tonnes, applying the same normalization logic used for Length.
-
-#### UC10 - UC11: The Power of Generics
-Refactored the core into `Quantity<U extends IMeasurable>`. This move eliminated category-specific classes. 
-* **Impact:** Adding **Volume** (Litres, Millilitres, Gallons) required zero changes to the core `Quantity` class, proving the system's scalability.
+### Secured Flow (JWT)
+> Client → JWT Filter → Controller → Service → Database
 
 
+### Google Login Flow
+> Client → Google → Backend → JWT → Client
 
-#### UC12 - UC13: Advanced Arithmetic & DRY 2.0
-Introduced Subtraction and Division. 
-* **Refactor:** Centralized all math into a private `ArithmeticOperation` enum using **Java Lambdas**. 
-* **DRY Logic:** Validation (null checks, category checks) is performed once in a helper method, reducing the bug surface by over 60%.
-
-#### UC14: Non-Linearity & Capability Guardrails
-The ultimate test of the architecture. Temperature (Celsius/Fahrenheit) introduced non-linear formulas ($y = mx + c$).
-* **ISP Implementation:** Refactored the `IMeasurable` interface to allow Temperature to "opt-out" of arithmetic operations while keeping Length/Weight/Volume "opted-in."
-
+##  Example
+> * Input: 1 foot and 12 inches
+> *  Output: true
 
 
 ---
 
-### Key Technical Concepts Applied
-* **TDD (Test Driven Development):** Over 100+ JUnit test cases ensuring 100% coverage of edge cases.
-* **Interface Segregation (ISP):** Using default methods to handle optional unit capabilities.
-* **Functional Programming:** Using `DoubleBinaryOperator` and `Function<Double, Double>` for math dispatching.
-* **Bounded Generics:** Ensuring type safety across measurement domains.
-* **Normalization:** Reducing all inputs to a "Base Unit" for consistent comparison.
+##  Key Concepts Used
+
+- **OOP (Object-Oriented Programming)** → Clean and modular design  
+- **TDD (Test-Driven Development)** → Writing tests before logic  
+- **DTO Pattern** → Clean API input/output  
+- **JWT** → Stateless authentication  
+- **OAuth 2.0** → Third-party login (Google)  
+- **Spring Boot** → Backend framework  
+- **Spring Security** → API protection  
 
 ---
 
-### Getting Started
-1. **Prerequisites:** Java 11+ and JUnit 4/5.
-2. **Build:** Clone the repository and run `mvn clean install`.
-3. **Execution:** Use `QuantityMeasurementApp.java` to see the demonstration of all 14 Use Cases in action.
+## How to Run
 
----
-
-*Developed with a focus on clean code, maintainability, and mathematical precision.*
+```bash
+mvn spring-boot:run
