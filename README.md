@@ -1,132 +1,67 @@
-# UC17: Spring Framework Integration - REST Services & JPA
+# 🔐 Quantity Measurement App – UC18 (Google Authentication)
 
-## Overview
+This project is a backend application that not only performs quantity operations (like unit conversion and arithmetic) but also focuses on **secure user authentication**.
 
-UC17 upgrades the Quantity Measurement Application from a standalone JDBC-based system (UC16) to a Spring Boot-powered RESTful application.
-
-This transformation introduces:
-- REST APIs for interaction
-- Spring Data JPA for persistence
-- Dependency Injection and transaction management
-- Production-ready architecture
-
-The goal is to move toward enterprise-grade backend development while preserving all existing business logic from UC1–UC16.
+In this stage (UC18), the main goal is to allow users to log in **securely using Google instead of manually creating accounts**.
 
 ---
 
-## Key Features
+## 💡 What is Authentication?
 
-### Spring Boot Integration
-- Auto-configuration and simplified setup
-- Embedded Tomcat server (no external server required)
+Authentication means verifying **who the user is**.
 
-### RESTful API
-- Exposes endpoints using `@RestController`
-- Supports JSON/XML responses
-- Proper HTTP methods: GET, POST, PUT, DELETE
+There are two ways used here:
 
-### Spring Data JPA
-- Eliminates JDBC boilerplate
-- Automatic ORM mapping
-- Repository interfaces instead of manual SQL
+### 1. JWT Authentication
+When a user logs in with email/password, the system generates a **JWT (JSON Web Token)**.
 
-### Layered Architecture
-- Controller Layer → Handles HTTP requests  
-- Service Layer → Business logic  
-- Repository Layer → Database interaction  
-
-### DTO-Based Communication
-- `QuantityInputDTO` → Input payload  
-- `QuantityMeasurementDTO` → Response object  
-
-### Exception Handling
-- Centralized using `@ControllerAdvice`
-- Clean API error responses with HTTP status codes
-
-### Swagger API Documentation
-- Interactive API documentation
-- Uses `@Operation` and `@Tag`
-
-### Testing Support
-- Unit and Integration testing
-- `MockMvc` for REST API testing
-
-### Monitoring
-- Spring Boot Actuator for:
-  - Health checks
-  - Metrics
+👉 Think of it like a digital pass:
+- You log in once
+- You receive a token
+- You use that token to access protected APIs
 
 ---
 
-## What Changed from UC16?
+### 2. Google Authentication (OAuth 2.0)
 
-UC16 used JDBC. UC17 replaces it with the Spring ecosystem.
+Instead of creating a new account, users can log in using Google.
 
-| UC16 (Before) | UC17 (Now) |
-|--------------|-----------|
-| Manual JDBC code | Spring Data JPA |
-| SQL queries | Repository methods |
-| Manual DI | Spring DI (`@Autowired`) |
-| No REST support | REST APIs |
-| Manual JSON handling | Automatic serialization |
-| Manual transaction handling | Declarative (optional) |
-| Hard to scale | Microservice-ready |
+👉 Flow:
+1. User clicks “Login with Google”
+2. Google verifies the user
+3. Backend receives user details (email, name)
+4. A JWT token is generated
+5. User is now authenticated
 
 ---
 
-## Problems in UC16 (Solved in UC17)
+## ⚙️ How It Works Internally
 
-- Too much boilerplate (ResultSet, Connection handling)
-- Manual transaction management
-- No REST API support
-- Difficult testing
-- Tight coupling
-- No framework ecosystem support
-
-UC17 resolves all of these using Spring Boot.
+- **Spring Security** protects APIs
+- **JWT Filter** checks every request for a valid token
+- **OAuth2 Service** handles Google login
+- **Success Handler** generates JWT after Google login
 
 ---
 
----
+## 🧪 Example
 
-## Important Components
+### If a user logs in via Google:
 
-### Controller Layer
-- Handles API requests
-- Uses:
-  - `@RestController`
-  - `@RequestMapping("/api/v1/quantities")`
-  - `@PostMapping`, `@GetMapping`
+> * Input → Google Login
+> * Output → JWT Token
 
-### Service Layer
-- Contains business logic
-- Annotated with `@Service`
-- Uses repository for DB operations
 
-### Repository Layer
-- Extends `JpaRepository`
-- No SQL required
+### Now this token is used for all future API requests.
 
 ---
 
-## Sample API Endpoints
+## 📌 Key Terms
 
-| Method | Endpoint | Description |
-|--------|----------|------------|
-| POST | `/compare` | Compare two quantities |
-| POST | `/convert` | Convert units |
-| POST | `/add` | Add quantities |
-| GET | `/history/{operation}` | Get operation history |
-| GET | `/count/{operation}` | Get operation count |
+- **JWT**: A secure token used instead of sessions  
+- **OAuth 2.0**: Protocol for third-party login (Google, GitHub)  
+- **Spring Security**: Framework to secure APIs  
 
 ---
 
-## Example Request
-
-```json
-{
-  "value1": 10,
-  "unit1": "FEET",
-  "value2": 120,
-  "unit2": "INCH"
-}
+This project demonstrates how modern applications handle **secure, scalable authentication** in real-world systems.

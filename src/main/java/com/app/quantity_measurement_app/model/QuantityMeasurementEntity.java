@@ -3,7 +3,6 @@ package com.app.quantity_measurement_app.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
@@ -16,7 +15,8 @@ import java.time.LocalDateTime;
 @Table(name = "quantity_measurement_entity", indexes = {
         @Index(name = "idx_operation", columnList = "operation"),
         @Index(name = "idx_measurement_type", columnList = "this_measurement_type"),
-        @Index(name = "idx_is_error", columnList = "is_error")
+        @Index(name = "idx_is_error", columnList = "is_error"),
+        @Index(name = "idx_user_id", columnList = "user_id")
 })
 public class QuantityMeasurementEntity implements Serializable {
 
@@ -25,6 +25,10 @@ public class QuantityMeasurementEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "this_value", nullable = false)
     private double thisValue;
