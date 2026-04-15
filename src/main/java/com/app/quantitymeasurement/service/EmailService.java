@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EmailService {
 
-    @Autowired
+    @Autowired(required = false)
     private JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
@@ -33,6 +33,10 @@ public class EmailService {
      */
     @Async
     public void sendRegistrationEmail(String to, String firstName) {
+    	 if (mailSender == null) {
+    	        log.warn("MailSender not configured. Skipping email.");
+    	        return;
+    	    }
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
