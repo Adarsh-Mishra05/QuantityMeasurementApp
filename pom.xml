@@ -12,6 +12,7 @@
 	<groupId>com.app</groupId>
 	<artifactId>quantity-measurement-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>  
 	<name>Quantity Measurement App</name>
 	<description>Spring Boot REST API Services for Quantity Measurements</description>
 	<url />
